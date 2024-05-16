@@ -7,10 +7,34 @@ public class Usuario {
    protected ArrayList<Usuario> seguindo, seguidores;
    protected ArrayList<Pessoa> interessados;
 
+   // Construtor completo
+   public Usuario(String login, String nome, String senha, Local cidade) {
+      this.login = login;
+      this.nome = nome;
+      this.senha = senha;
+      this.cidade = cidade;
 
+      this.posts = new ArrayList<>();
+      this.seguindo = new ArrayList<>();
+      this.seguidores = new ArrayList<>();
+      this.interessados = new ArrayList<>();
+
+   }
+
+   // Construtor da parte 2 do trabalho
+   public Usuario(String login, String nome, String senha) {
+      this.login = login;
+      this.nome = nome;
+      this.senha = senha;
+
+      this.posts = new ArrayList<>();
+      this.seguindo = new ArrayList<>();
+      this.seguidores = new ArrayList<>();
+      this.interessados = new ArrayList<>();
+
+   }
 
    // Métodos
-
    public boolean validarAcesso(String senha) {
       return this.senha.equals(senha);
    }
@@ -33,13 +57,13 @@ public class Usuario {
    }
 
    public void mostrarPosts() {
-      for (Postagem postagem : posts) {
+      for (Postagem postagem : this.posts) {
          postagem.mostrarDados();
       }
    }
 
    public void feed() {
-      for (Usuario usuario : seguindo) {
+      for (Usuario usuario : this.seguindo) {
          usuario.mostrarPosts();
       }
    }

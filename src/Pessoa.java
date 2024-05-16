@@ -1,5 +1,3 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.ArrayList;
 
 public class Pessoa extends Usuario {
@@ -7,11 +5,20 @@ public class Pessoa extends Usuario {
     private Data dataNasc;
     private ArrayList<Usuario> interesses;
 
-    // Construtor
-    Pessoa(String login, String nome, String senha, String cpf, String bio, int dia, int mes, int ano) {
-        this.login = login;
-        this.nome = nome;
-        this.senha = senha;
+    // Construtor completo
+    public Pessoa(String login, String nome, String senha, Local cidade, String cpf, String bio, int dia, int mes, int ano) {
+        super(login, nome, senha, cidade);
+
+        this.cpf = cpf;
+        this.bio = bio;
+        this.dataNasc = new Data(dia, mes, ano);
+        this.interesses = new ArrayList<>();
+    }
+
+    // Construtor da parte 2 do trabalho
+    public Pessoa(String login, String nome, String senha, String cpf, String bio, int dia, int mes, int ano) {
+        super(login, nome, senha);
+
         this.cpf = cpf;
         this.bio = bio;
         this.dataNasc = new Data(dia, mes, ano);

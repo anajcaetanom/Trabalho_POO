@@ -58,7 +58,7 @@ public class Entrada {
      */
     public int menu1() {
 
-        String msg = "*********************\n" +
+        String msg = "*********** Bem vinde ao Orkut! ***********\n" +
                 "Escolha uma opção:\n" +
                 "1) Cadastrar pessoa.\n" +
                 "2) Cadastrar empresa.\n" +
@@ -68,19 +68,39 @@ public class Entrada {
         int option = this.lerInteiro(msg);
 
         while (option < 0 || option > 3) {
-            System.out.println("Opção inválida. Tente novamente: ");
+            System.out.println("Opção inválida. Digite algum dos números acima: ");
+            System.out.println("Tente novamente: ");
             option = this.lerInteiro(msg);
         }
 
         return option;
     }
 
+    /**
+     * Imprime o menu secundário, lê a opção escolhida pelo usuário e retorna a opção selecionada.
+     * @return Inteiro contendo a opção escolhida pelo usuário
+     */
     public int menu2(Sistema sistema, Usuario usuario) {
+        String msg = "*-*-*-*-*-* Login efetuado! *-*-*-*-*-*\n" +
+                "Escolha uma opção:\n" +
+                "1) Seguir alguém.\n" +
+                "2) Fazer uma postagem.\n" +
+                "3) Exibir seu feed.\n" +
+                "0) Sair.\n";
 
+        int option = this.lerInteiro(msg);
+
+        while (option < 0 || option > 3) {
+            System.out.println("Opção inválida. Digite algum dos números acima.");
+            System.out.println("Tente novamente: ");
+            option = this.lerInteiro(msg);
+        }
+
+        return option;
     }
 
     /**
-     * Lê os dados de uma nova Pessoa e cadastra-a no sistema.
+     * Lê os dados de uma nova Pessoa e a cadastra no sistema.
      * @param sistema: Um objeto da classe Sistema
      */
     public void cadPessoa(Sistema sistema) {
@@ -100,6 +120,90 @@ public class Entrada {
 
         Pessoa p = new Pessoa(login, nome, senha, cpf, bio, dia, mes, ano);
         sistema.novaPessoa(p);
+
+        System.out.println("Pessoa cadastrada!\n");
     }
+
+    /**
+     * Lê os dados de uma nova Empresa e a cadastra no sistema.
+     * @param sistema: Um objeto da classe Sistema
+     */
+    public void cadEmpresa(Sistema sistema) {
+        String login = this.lerLinha("Escolha um login: ");
+
+        while (sistema.buscarUsuario(login) != null) {
+            login = this.lerLinha("Login já utilizado. Escolha outro: ");
+        }
+
+        String nome = this.lerLinha("Digite seu nome: ");
+        String senha = this.lerLinha("Digite sua senha: ");
+        String cnpj = this.lerLinha("Digite seu cnpj: ");
+
+        Empresa e = new Empresa(login, nome, senha, cnpj);
+        sistema.novaEmpresa(e);
+
+        System.out.println("Empresa Cadastrada!\n");
+    }
+
+    /**
+     * Lê os dados de uma nova Empresa e a cadastra no sistema.
+     * @param usuario: Um objeto da classe Usuario
+     */
+    public void cadPostagem(Usuario usuario) {
+        String nome_foto = this.lerLinha("Digite o nome da foto: ");
+        String legenda = this.lerLinha("Digite a legenda da foto: ");
+        System.out.println("Digite a data da foto.");
+        int dia = this.lerInteiro("Dia: ");
+        int mes = this.lerInteiro("Mês: ");
+        int ano = this.lerInteiro("Ano: ");
+
+        String senha = this.lerLinha("Confirme sua senha: ");
+
+        Data data_do_post = new Data(dia, mes, ano);
+
+        usuario.postar(nome_foto, legenda, data_do_post, senha);
+
+        System.out.println("Foto postada!");
+    }
+
+    public void login(Sistema sistema) {
+        Usuario usuario;
+        String username;
+        int opcao;
+
+        String login = this.lerLinha("Digite seu login: ");
+
+        if (sistema.buscarUsuario(login) != null) {
+            usuario = sistema.buscarUsuario(login);
+            String senha = this.lerLinha("Digite sua senha: ");
+            if (usuario.validarAcesso(senha)) {
+                opcao = menu2(sistema, usuario);
+
+                while (opcao != 0) {
+
+                    // Seguir
+                    if (opcao == 1) {
+                        System.out.println("Lista de usuários:");
+                        sistema.listarUsuarios();
+                        username = lerLinha("Digite o username do usuário que deseja seguir: ");
+                        usuario.seguir(sistema.buscarUsuario(username));
+                    }
+
+                    // Postar
+                    if (opcao == 2) cadPostagem(usuario);
+
+                    // Feed
+                    if (opcao == 3) usuario.feed();
+
+                    opcao = menu2(sistema, usuario);
+                }
+
+                System.out.println("Senha incorreta.");
+            }
+        }
+
+        System.out.println("Login não encontrado.");
+    }
+
 
 }
