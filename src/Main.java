@@ -5,6 +5,8 @@ public class Main {
         Entrada io = new Entrada();
         Sistema s = new Sistema();
 
+        System.out.print("\n\n*********** Bem vinde ao Orkut! ***********\n");
+
         int op = io.menu1();
 
         while (op != 0) {
@@ -20,5 +22,8 @@ public class Main {
 
             op = io.menu1();
         }
+
+        System.out.println("\nSaiu do Orkut. tchauuuu <3");
+
     }
 }

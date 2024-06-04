@@ -23,7 +23,7 @@ public class Empresa extends Usuario {
 
     // Métodos
     public String toString() {
-        return this.nome + "(" + this.login + " - " + this.cnpj + ")";
+        return this.nome + " (" + this.login + " - " + this.cnpj + ")";
     }
 
 

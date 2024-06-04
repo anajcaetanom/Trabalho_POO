@@ -32,13 +32,13 @@ public class Sistema {
     }
 
     public void listarUsuarios() {
+        System.out.println("Pessoas:");
         for (Pessoa p : this.pessoas) {
-            System.out.println("Pessoas:");
             System.out.println(p.toString());
         }
 
+        System.out.println("Empresas:");
         for (Empresa e : this.empresas) {
-            System.out.println("Empresas:");
             System.out.println(e.toString());
         }
     }

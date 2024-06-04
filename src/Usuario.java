@@ -63,6 +63,7 @@ public class Usuario {
    }
 
    public void feed() {
+      System.out.println("\nFEED\nN");
       for (Usuario usuario : this.seguindo) {
          usuario.mostrarPosts();
       }
