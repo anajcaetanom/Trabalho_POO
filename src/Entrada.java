@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 /**
  * Classe com as rotinas de entrada e saída do projeto
@@ -35,11 +36,17 @@ public class Entrada {
     private String lerLinha(String msg) {
         // Imprime uma mensagem ao usuário, lê uma e retorna esta linha
         System.out.print(msg);
-        String linha = this.input.nextLine();
+        try {
+            String linha = this.input.nextLine();
+            // Ignora linhas começando com #, que vão indicar comentários no arquivo de entrada:
+            while (linha.charAt(0) == '#') linha = this.input.nextLine();
 
-        // Ignora linhas começando com #, que vão indicar comentários no arquivo de entrada:
-        while (linha.charAt(0) == '#') linha = this.input.nextLine();
-        return linha;
+            return linha;
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("Nao foi possivel ler o caractere.");
+            return null;
+        }
+
     }
 
     /**
@@ -50,7 +57,12 @@ public class Entrada {
     private int lerInteiro(String msg) {
         // Imprime uma mensagem ao usuário, lê uma linha contendo um inteiro e retorna este inteiro
         String linha = this.lerLinha(msg);
-        return Integer.parseInt(linha);
+        try {
+            return Integer.parseInt(linha);
+        } catch (NumberFormatException e) {
+            System.out.println("Nao foi possivel converter o caractere para inteiro.");
+            return -1;
+        }
     }
 
     /**
@@ -67,13 +79,12 @@ public class Entrada {
                 0) Sair.
                 """;
 
-        int option = this.lerInteiro(msg);
+            int option = this.lerInteiro(msg);
 
-        while (option < 0 || option > 3) {
-            System.out.println("Opção inválida. Digite algum dos números acima: ");
-            System.out.println("Tente novamente: ");
-            option = this.lerInteiro(msg);
-        }
+            while (option < 0 || option > 3) {
+                System.out.println("Opção inválida. Digite algum dos números acima. ");
+                option = this.lerInteiro(msg);
+            }
 
         return option;
     }
@@ -95,7 +106,6 @@ public class Entrada {
 
         while (option < 0 || option > 3) {
             System.out.println("Opção inválida. Digite algum dos números acima.");
-            System.out.println("Tente novamente: ");
             option = this.lerInteiro(msg);
         }
 

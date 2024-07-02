@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Usuario {
+public abstract class Usuario {
    protected String login, nome, senha;
    protected Local cidade;
    protected ArrayList<Postagem> posts;
@@ -34,13 +34,12 @@ public class Usuario {
 
    }
 
-   // Métodos
+   // Método Abstrato
+   public abstract String toString();
+
+   // Métodos Concretos
    public boolean validarAcesso(String senha) {
       return this.senha.equals(senha);
-   }
-
-   public String toString() {
-      return this.nome + "(" + this.login + ")";
    }
 
    public void postar(String foto, String legenda, Data hoje, String senha) {
