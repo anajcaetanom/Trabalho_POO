@@ -42,6 +42,7 @@ public class Entrada {
             while (linha.charAt(0) == '#') linha = this.input.nextLine();
 
             return linha;
+
         } catch (StringIndexOutOfBoundsException e) {
             System.out.println("Nao foi possivel ler o caractere.");
             return null;
@@ -131,10 +132,21 @@ public class Entrada {
         int mes = this.lerInteiro("\nDigite seu mes de nascimento: ");
         int ano = this.lerInteiro("\nDigite seu ano de nascimento: ");
 
-        Pessoa p = new Pessoa(login, nome, senha, cpf, dia, mes, ano);
-        sistema.novaPessoa(p);
+        if ((login == null || login.isEmpty()) ||
+            (nome == null || nome.isEmpty()) ||
+            (senha == null || senha.isEmpty()) ||
+            (cpf == null || cpf.isEmpty()) ||
+            (dia <= 0 || mes <= 0 || ano <= 0))
+        {
+            System.out.println("Dados invalidos, tente novamente.");
+        } else {
+            Pessoa p = new Pessoa(login, nome, senha, cpf, dia, mes, ano);
+            sistema.novaPessoa(p);
 
-        System.out.println("\n\nPessoa cadastrada!\n");
+            System.out.println("\n\nPessoa cadastrada!\n");
+        }
+
+
     }
 
     /**
@@ -153,10 +165,21 @@ public class Entrada {
         String senha = this.lerLinha("\nDigite sua senha: ");
         String cnpj = this.lerLinha("\nDigite seu cnpj: ");
 
-        Empresa e = new Empresa(login, nome, senha, cnpj);
-        sistema.novaEmpresa(e);
+        if ((login == null || login.isEmpty()) ||
+            (nome == null || nome.isEmpty()) ||
+            (senha == null || senha.isEmpty()) ||
+            (cnpj == null || cnpj.isEmpty())) {
 
-        System.out.println("\n\nEmpresa Cadastrada!\n");
+            System.out.println("Dados invalidos, tente novamente.");
+
+        } else {
+            Empresa e = new Empresa(login, nome, senha, cnpj);
+            sistema.novaEmpresa(e);
+
+            System.out.println("\n\nEmpresa Cadastrada!\n");
+        }
+
+
     }
 
     /**
@@ -174,58 +197,74 @@ public class Entrada {
 
         String senha = this.lerLinha("\nConfirme sua senha: ");
 
-        Data data_do_post = new Data(dia, mes, ano);
+        if (nome_foto == null || nome_foto.isEmpty() ||
+            legenda == null || legenda.isEmpty() ||
+            dia <= 0 || mes <= 0 || ano <= 0) {
+            System.out.println("Dados invalidos, tente novamente.");
+        } else {
+            Data data_do_post = new Data(dia, mes, ano);
 
-        usuario.postar(nome_foto, legenda, data_do_post, senha);
+            usuario.postar(nome_foto, legenda, data_do_post, senha);
 
-        System.out.println("\nFoto postada!\n");
+            System.out.println("\nFoto postada!\n");
+        }
+
     }
 
     public void login(Sistema sistema) {
         Usuario usuario;
         String username;
         int opcao;
+
         System.out.println("\nEFETUANDO LOGIN");
         String login = this.lerLinha("\nDigite seu login: ");
 
-        if (sistema.buscarUsuario(login) != null) {
-            usuario = sistema.buscarUsuario(login);
-            String senha = this.lerLinha("\nDigite sua senha: ");
-            if (usuario.validarAcesso(senha)) {
-                System.out.println("\n\n*-*-*-*-*-* Login efetuado! *-*-*-*-*-*\n");
-                opcao = menu2(sistema, usuario);
-
-                while (opcao != -1) {
-
-                    // Seguir
-                    if (opcao == 1) {
-                        System.out.println("\nSEGUIR ALGUÉM\n");
-                        System.out.println("\nLISTA DE USERS");
-                        sistema.listarUsuarios();
-                        username = lerLinha("\nDigite o username do usuário que deseja seguir: ");
-                        usuario.seguir(sistema.buscarUsuario(username));
-                        System.out.println("\nSeguiu '" + username + "'.\n");
-                    }
-
-                    // Postar
-                    if (opcao == 2) cadPostagem(usuario);
-
-                    // Feed
-                    if (opcao == 3) usuario.feed();
-
-                    // Logout
-                    if (opcao == 0) {
-                        System.out.println("\nLogout efetuado.\n");
-                        break;
-                    }
-
+        try {
+            if (sistema.buscarUsuario(login) != null) {
+                usuario = sistema.buscarUsuario(login);
+                String senha = this.lerLinha("\nDigite sua senha: ");
+                if (usuario.validarAcesso(senha)) {
+                    System.out.println("\n\n*-*-*-*-*-* Login efetuado! *-*-*-*-*-*\n");
                     opcao = menu2(sistema, usuario);
+
+                    while (opcao != -1) {
+
+                        // Seguir
+                        if (opcao == 1) {
+                            System.out.println("\nSEGUIR ALGUÉM\n");
+                            System.out.println("\nLISTA DE USERS");
+                            sistema.listarUsuarios();
+                            username = lerLinha("\nDigite o username do usuário que deseja seguir: ");
+                            usuario.seguir(sistema.buscarUsuario(username));
+                            System.out.println("\nSeguiu '" + username + "'.\n");
+                        }
+
+                        // Postar
+                        if (opcao == 2) cadPostagem(usuario);
+
+                        // Feed
+                        if (opcao == 3) usuario.feed();
+
+                        // Logout
+                        if (opcao == 0) {
+                            System.out.println("\nLogout efetuado.\n");
+                            break;
+                        }
+
+                        opcao = menu2(sistema, usuario);
+                    }
                 }
+                else System.out.println("\nSenha incorreta.");
             }
-            else System.out.println("\nSenha incorreta.");
+            else System.out.println("Login não encontrado.\n");
+
+        } catch (NullPointerException e) {
+            System.out.println("Dados invalidos, tente novamente.");
         }
-        else System.out.println("Login não encontrado.\n");
+
     }
+
+
 
 
 }
