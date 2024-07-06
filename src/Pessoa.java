@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Pessoa extends Usuario {
@@ -23,10 +26,37 @@ public class Pessoa extends Usuario {
         this.interesses = new ArrayList<>();
     }
 
+    // Construtor da parte 3 do trabalho
+    public Pessoa(BufferedReader br) {
+        super(br);
+        try {
+            this.cpf = br.readLine();
+            this.dataNasc = new Data(br);
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar pessoa.");
+        }
+    }
+
     // Métodos
     public String toString() {
         return this.nome + " (" + this.login + " - " + this.cpf + ")";
     }
+
+    public void write_pessoa (BufferedWriter bw) {
+        try {
+            bw.write("P" + "\n");
+            bw.write(this.login + "\n");
+            bw.write(this.nome + "\n");
+            bw.write(this.senha + "\n");
+            bw.write(this.cpf + "\n");
+            dataNasc.write_data(bw);
+        } catch (IOException e) {
+            System.out.println("Erro ao gravar dados da pessoa.");
+        }
+    }
+
+
+
 
 
 }

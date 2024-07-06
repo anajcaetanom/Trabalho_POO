@@ -200,10 +200,11 @@ public class Entrada {
         if (nome_foto == null || nome_foto.isEmpty() ||
             legenda == null || legenda.isEmpty() ||
             dia <= 0 || mes <= 0 || ano <= 0) {
+
             System.out.println("Dados invalidos, tente novamente.");
+
         } else {
             Data data_do_post = new Data(dia, mes, ano);
-
             usuario.postar(nome_foto, legenda, data_do_post, senha);
 
             System.out.println("\nFoto postada!\n");
@@ -222,9 +223,11 @@ public class Entrada {
         try {
             if (sistema.buscarUsuario(login) != null) {
                 usuario = sistema.buscarUsuario(login);
+
                 String senha = this.lerLinha("\nDigite sua senha: ");
                 if (usuario.validarAcesso(senha)) {
                     System.out.println("\n\n*-*-*-*-*-* Login efetuado! *-*-*-*-*-*\n");
+
                     opcao = menu2(sistema, usuario);
 
                     while (opcao != -1) {
@@ -237,6 +240,8 @@ public class Entrada {
                             username = lerLinha("\nDigite o username do usuário que deseja seguir: ");
                             usuario.seguir(sistema.buscarUsuario(username));
                             System.out.println("\nSeguiu '" + username + "'.\n");
+
+                            sistema.write_txt_file();
                         }
 
                         // Postar
