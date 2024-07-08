@@ -3,12 +3,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class Usuario {
+public abstract class Usuario implements Comparable<Usuario> {
    protected String login, nome, senha;
    protected Local cidade;
    protected ArrayList<Postagem> posts;
    protected ArrayList<Usuario> seguindo, seguidores;
    protected ArrayList<Pessoa> interessados;
+
 
    // Construtor completo
    public Usuario(String login, String nome, String senha, Local cidade) {
@@ -63,7 +64,8 @@ public abstract class Usuario {
 
    public void postar(String foto, String legenda, Data hoje, String senha) {
       if (this.validarAcesso(senha)) {
-         Postagem novaPostagem = new Postagem(foto, legenda, hoje);
+         Usuario usuario = this;
+         Postagem novaPostagem = new Postagem(foto, legenda, hoje, usuario);
          this.posts.add(novaPostagem);
       }
       else System.out.print("Senha incorreta.");
@@ -74,17 +76,8 @@ public abstract class Usuario {
       usuario.seguidores.add(this);
    }
 
-   public void mostrarPosts() {
-      for (Postagem postagem : this.posts) {
-         postagem.mostrarDados();
-      }
-   }
-
    public void feed() {
-      System.out.println("\nFEED\nN");
-      for (Usuario usuario : this.seguindo) {
-         usuario.mostrarPosts();
-      }
+      sorted_feed();
    }
 
    public void write_seguindo (BufferedWriter bw) {
@@ -99,6 +92,33 @@ public abstract class Usuario {
       }
    }
 
+   public void sorted_feed() {
+      ArrayList<Postagem> feed_posts = new ArrayList<>();
+
+      for (Usuario u : this.seguindo) {
+          feed_posts.addAll(u.posts);
+      }
+
+      feed_posts.sort(new FeedSorter());
+
+      System.out.println("Feed de " + this.login + ":");
+
+      for (Postagem postagem : feed_posts) {
+         System.out.println("*");
+         System.out.println(postagem.getUsuario().nome + " (" + postagem.getUsuario().seguidores.size() + " seguidores)");
+         postagem.mostrarDados();
+         System.out.println();
+      }
+
+   }
+
+   public String getLogin() {
+      return this.login;
+   }
+
+   public int compareTo(Usuario u) {
+      return this.login.compareTo(u.getLogin());
+   }
 
 
 
