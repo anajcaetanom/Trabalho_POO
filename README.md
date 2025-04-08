@@ -27,5 +27,6 @@ This project is a console-based simulation of a social media platform, developed
 ## 📌 Note
 
 All menus and messages are in **Portuguese**, as the project was designed with a Brazilian context in mind.
+
 ---
 ✨ This project was developed as part of the Object-Oriented Programming course during the 2024/1 semester.
